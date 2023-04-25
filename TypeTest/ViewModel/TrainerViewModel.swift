@@ -45,15 +45,27 @@ class TrainerViewModel: ObservableObject {
     func isCloseTrainerAddView(){
         isAddView = false
     }
-    //🟨怪しいポイント
+
     func addPokemon(text: String, trainer: PokemonTrainer){
         //indexを取得。選択したトレーナーを検知し、そのトレーナのポケモンに要素を追加する。
         if let index = pokemonTrainers.firstIndex(of: trainer){
             var updatedTrainer = trainer
             updatedTrainer.pokemons.append(Pokemon(name: text))
+            print("<<<<<<",updatedTrainer.pokemons)
             pokemonTrainers[index] = updatedTrainer
+            print(">>>pokeAdd", pokemonTrainers[index])
         }
-        isShowPokeAddView = false
+        isClosePokemonAddView()
+    }
+    
+    func returnAdress(trainer: PokemonTrainer?) -> PokemonTrainer? {
+        guard let trainer = trainer else {
+            return nil
+        }
+        //取得してきたトレーナーのIDを検索してポケモンを返す。
+        guard let index = pokemonTrainers.firstIndex(where: { $0.id == trainer.id }) else { return nil }
+                
+        return pokemonTrainers[index]
     }
     
     func isShowPokemonAddView(){

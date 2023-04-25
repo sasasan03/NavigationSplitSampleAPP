@@ -13,7 +13,7 @@ struct TypeTestApp: App {
         WindowGroup {
            // ExperimentView()
             TopView()
-//                .environmentObject(TrainerViewModel())
+                .environmentObject(TrainerViewModel())
          //   OnApperCounter()
         }
     }

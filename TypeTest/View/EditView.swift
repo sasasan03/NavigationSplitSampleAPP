@@ -9,11 +9,11 @@ import SwiftUI
 
 struct EditView: View {
     
-    @StateObject private var trainerViewModel = TrainerViewModel()
+    @EnvironmentObject var trainerViewModel: TrainerViewModel
+//    @StateObject private var trainerViewModel = TrainerViewModel()
     let pokemonTrainer: PokemonTrainer
     
     var body: some View {
-        NavigationStack{
             List(pokemonTrainer.pokemons){ pokemon in
                 Text(pokemon.name)
             }
@@ -32,18 +32,20 @@ struct EditView: View {
                         trainerViewModel.isClosePokemonAddView()
                     },
                     save: { text in
+                        let _ = print("+++")
                         trainerViewModel.addPokemon(text: text, trainer: pokemonTrainer)
                         trainerViewModel.isClosePokemonAddView()
-                        print("¥¥¥¥¥¥１")
+                        let _ = print("---")
                     }
                 )
             }
-        }
     }
 }
 
-struct EditView_Previews: PreviewProvider {
-    static var previews: some View {
-        EditView(pokemonTrainer: PokemonTrainer(name: "わたる", pokemons: [Pokemon(name: "魁龍")]))
-    }
-}
+//struct EditView_Previews: PreviewProvider {
+//    static var previews: some View {
+//        TopView()
+//            .environment(trainerViewModel:TrainerViewModel)
+//        EditView(pokemonTrainer: PokemonTrainer(name: "わたる", pokemons: [Pokemon(name: "魁龍")]))
+//    }
+//}

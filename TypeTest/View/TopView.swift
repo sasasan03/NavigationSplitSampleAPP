@@ -8,9 +8,8 @@
 import SwiftUI
 
 struct TopView: View {
-    
-//    @EnvironmentObject private var trainerViewModel:TrainerViewModel
-    @StateObject private var trainerViewModel = TrainerViewModel()
+//    @StateObject var trrainerViewMOdel: TrainerAddView?
+    @EnvironmentObject var trainerViewModel:TrainerViewModel
     @State private var selectionTrainer: PokemonTrainer?
     @State private var selectionPokemon: Pokemon?
     
@@ -38,13 +37,17 @@ struct TopView: View {
                     trainerViewModel.addTrainer(text: text)
                     }
                 )
+               
             }
+           //🟥 .presentationDetents([.height(10)])
         }, detail:{
-            if let pokemonTrainer = selectionTrainer {
+            //trainerViewModel.returnAdress(trainer: selectionTrainer)で渡している。
+//            let aaaaa = trainerViewModel.returnAdress(trainer: selectionTrainer)
+            if let pokemonTrainer =  trainerViewModel.returnAdress(trainer: selectionTrainer){
+                //変更させたい。選ばれたトレーナーにポケモンを追加したい。
+                //引数はトレーナー型である。
+                //トレーナー型を返す関数を作り、その関数内でポケモンを追加する。
                 EditView(pokemonTrainer: pokemonTrainer)
-                    .onDisappear{
-                        //  pokemonTrainer.pokemons
-                    }
                 NavigationLink("アニメーションプラス") {
                     PokemonCheckView(pokemons: pokemonTrainer.pokemons)
                 }
@@ -73,5 +76,6 @@ struct PokemonCheckView: View{
 struct SwiftUIView_Previews: PreviewProvider {
     static var previews: some View {
         TopView()
+            .environmentObject(TrainerViewModel())
     }
 }
