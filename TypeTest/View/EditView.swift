@@ -12,13 +12,20 @@ struct EditView: View {
     @EnvironmentObject var trainerViewModel: TrainerViewModel
     //    @StateObject private var trainerViewModel = TrainerViewModel()
     let pokemonTrainer: PokemonTrainer
+    let pokemon: Pokemon
     
     var body: some View {
         List{
             ForEach(pokemonTrainer.pokemons){ pokemon in
                 Text(pokemon.name)
             }
-            .onDelete(perform: trainerViewModel.pokemonDelete)
+            .swipeActions(edge: .trailing) { 
+                Button("削除"){
+                    trainerViewModel.pokemonDelete(trainer: pokemonTrainer, pokemon: pokemon)
+                    print(">>ボタン２")
+                }
+                .tint(.red)
+            }
         }
         .toolbar {
             ToolbarItem(placement: .navigationBarTrailing) {

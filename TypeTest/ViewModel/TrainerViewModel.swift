@@ -33,31 +33,37 @@ class TrainerViewModel: ObservableObject {
     //UserDefaultでデータをデバイスに保存する処理を追加していく。
     private let userDefaultManager = UserDefaultManager()
     
-    func pokemonDelete(trainer: PokemonTrainer, pokemon: Pokemon) {
-        guard let trainerIndex = pokemonTrainers.firstIndex(where: { $0.id == trainer.id }) else { return }
-        guard let pokemonIndex = pokemonTrainers[trainerIndex].pokemons.firstIndex(where: { $0.id == pokemon.id }) else { return }
+    func pokemonDelete(trainer: PokemonTrainer, pokemon: Pokemon)  {
+        guard let trainerIndex = pokemonTrainers.firstIndex(where: { $0.id == trainer.id }) else { return print("値なし1")}
+        guard let pokemonIndex = pokemonTrainers[trainerIndex].pokemons.firstIndex(where: { $0.id == pokemon.id }) else { return print("値なし2") }
+        print(">>削除",pokemonIndex)
         pokemonTrainers[trainerIndex].pokemons.remove(at: pokemonIndex)
+        print(">>ポケモン配列",pokemonTrainers[trainerIndex].pokemons)
         do {
             try userDefaultManager.save(trainer: pokemonTrainers)
         } catch {
             let error = error as? DataConvertError ?? DataConvertError.unknown
             print(error.title)
         }
-
     }
+    
+    func pokemonTrainerIndex(trainer: PokemonTrainer)-> Int{
+        guard let trainerIndex = pokemonTrainers.firstIndex(where: { $0.id == trainer.id }) else { return 0 }
+        return trainerIndex
+    }
+    
+//    func pokeDelete(offset: IndexSet){
+//        self.pokemonTrainers[].pokemons.remove(atOffsets: offset)
+//        do {
+//            try userDefaultManager.save(trainer: pokemonTrainers)
+//        } catch {
+//            let error = error as? DataConvertError ?? DataConvertError.unknown
+//            print(error.title)
+//        }
+//    }
     
     
     func delete(offset: IndexSet){
-        self.pokemonTrainers.remove(atOffsets: offset)
-        do {
-            try userDefaultManager.save(trainer: pokemonTrainers)
-        } catch {
-            let error = error as? DataConvertError ?? DataConvertError.unknown
-            print(error.title)
-        }
-    }
-    
-    func pokeDelete(offset: IndexSet){
         self.pokemonTrainers.remove(atOffsets: offset)
         do {
             try userDefaultManager.save(trainer: pokemonTrainers)

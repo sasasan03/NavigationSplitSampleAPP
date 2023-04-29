@@ -15,24 +15,29 @@ struct ExperimentView: View {
         "Papaya",
         "Mango"
     ]
+    @State var items = [[1,2,3], [4,5,6], [7,8,9]]
     
     var body: some View {
-        NavigationView {
-            List {
-                ForEach(fruits, id: \.self) { fruit in
-                    Text(fruit)
+      
+            
+
+                List {
+                    ForEach(items.indices, id: \.self) { index in
+                        HStack {
+                            ForEach(items[index], id: \.self) { item in
+                                Text("\(item)")
+                            }
+                        }
+                        .contextMenu {
+                            Button("Remove 1") {
+                                self.items[index].removeAll { $0 == 1 }
+                            }
+                        }
+                    }
                 }
-                .onDelete { fruits.remove(atOffsets: $0) }
-                .onMove { fruits.move(fromOffsets: $0, toOffset: $1) }
-            }
-            .navigationTitle("Fruits")
-            .toolbar {
-                EditButton()
             }
         }
-        
-    }
-}
+
 //ーーーーーーーーーーーーーーーーーーーーーonChangeのテスト
 //            Text("Hello, world!")
 //                .padding()

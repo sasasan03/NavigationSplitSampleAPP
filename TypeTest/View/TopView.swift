@@ -12,6 +12,7 @@ struct TopView: View {
     @EnvironmentObject var trainerViewModel:TrainerViewModel
     @State private var selectionTrainer: PokemonTrainer?
     @State private var selectionPokemon: Pokemon?
+    let pokemon: Pokemon
     
     var body: some View {
         
@@ -20,7 +21,7 @@ struct TopView: View {
                     ForEach(trainerViewModel.pokemonTrainers){ pokemonTrainer in
                         NavigationLink(pokemonTrainer.name, value: pokemonTrainer)
                     }
-                    .onDelete(perform: trainerViewModel.delete)
+                    .onDelete(perform: trainerViewModel.delete(offset: ))
                 }
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {
@@ -46,7 +47,12 @@ struct TopView: View {
            //🟥 .presentationDetents([.height(10)])
         }, detail:{
             if let pokemonTrainer =  trainerViewModel.returnAdress(trainer: selectionTrainer){
-                EditView(pokemonTrainer: pokemonTrainer)
+                var index = pokemonTrainer.pokemons.count
+                if index != 0 {
+                    EditView(pokemonTrainer: pokemonTrainer, pokemon: pokemonTrainer.pokemons[index - 1])
+                } else {
+                    EditView(pokemonTrainer: pokemonTrainer, pokemon: Pokemon(name: ""))
+                }
                 NavigationLink("アニメーションプラス") {
                     PokemonCheckView(pokemons: pokemonTrainer.pokemons)
                 }
@@ -74,7 +80,7 @@ struct PokemonCheckView: View{
 
 struct SwiftUIView_Previews: PreviewProvider {
     static var previews: some View {
-        TopView()
+        TopView(pokemon: Pokemon(name: "???"))
             .environmentObject(TrainerViewModel())
     }
 }
