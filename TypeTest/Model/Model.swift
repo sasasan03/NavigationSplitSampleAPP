@@ -7,14 +7,14 @@
 
 import Foundation
 
-struct Pokemon: Identifiable, Hashable {
-    let id = UUID()
+struct Pokemon: Identifiable, Hashable, Codable  {
+    var id = UUID()
     //String?は違和感。手持ちを持たずにスタート（必然的に選ぶ動きがあるのならnilあり)するなら空配列の方がよし！
     var name: String
 }
 
-struct PokemonTrainer: Identifiable, Hashable {
-    let id = UUID()
+struct PokemonTrainer: Identifiable, Hashable, Codable {
+    var id = UUID()
     var name: String
     var pokemons: [Pokemon]
 }

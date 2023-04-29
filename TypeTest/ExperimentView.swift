@@ -9,28 +9,30 @@ import SwiftUI
 
 struct ExperimentView: View {
     
-    @Environment(\.scenePhase) private var scenePhase
-    @State var aaa = ["a","b","c"]
-    @State var textField: String
+    @State private var fruits = [
+        "Apple",
+        "Banana",
+        "Papaya",
+        "Mango"
+    ]
     
     var body: some View {
-        VStack{
-            List(aaa, id: \.self){ a in
-                Text(a)
-            }
-            VStack{
-                TextField("文字入力", text: $textField)
-                Button {
-                    appendAAA(string: textField)
-                } label: {
-                    Text("追加")
+        NavigationView {
+            List {
+                ForEach(fruits, id: \.self) { fruit in
+                    Text(fruit)
                 }
+                .onDelete { fruits.remove(atOffsets: $0) }
+                .onMove { fruits.move(fromOffsets: $0, toOffset: $1) }
+            }
+            .navigationTitle("Fruits")
+            .toolbar {
+                EditButton()
             }
         }
+        
     }
-    func appendAAA(string: String){
-        aaa.append(string)
-    }
+}
 //ーーーーーーーーーーーーーーーーーーーーーonChangeのテスト
 //            Text("Hello, world!")
 //                .padding()
@@ -47,11 +49,44 @@ struct ExperimentView: View {
 //                    }
 //                }
 //ーーーーーーーーーーーーーーーーーーーーー
-        
+struct ListView: View {
+  @State var names = ["First", "Second", "Third"]
+  
+  var body: some View {
+    VStack {
+      List(names, id:\.self) { name in
+        Text(name)
+      }
+      .navigationBarTitle("List only")
+    }
+    .navigationBarItems(trailing: EditButton())
+    .padding()
+  }
 }
+
+struct ListForEachView: View {
+  @State var names = ["First", "Second", "Third"]
+
+  var body: some View {
+      VStack {
+        List {
+          ForEach(names, id: \.self) { name in
+            Text(name)
+          }
+          .onDelete(perform: { indexSet in
+            names.remove(at: indexSet.first!)
+          })
+        }
+        .navigationBarTitle("Names")
+      }
+      .navigationBarItems(trailing: EditButton())
+      .padding()
+  }
+}
+
 
 struct ExperimentView_Previews: PreviewProvider {
     static var previews: some View {
-        ExperimentView(textField: "")
+        ExperimentView()
     }
 }

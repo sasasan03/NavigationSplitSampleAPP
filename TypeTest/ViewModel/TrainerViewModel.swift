@@ -30,11 +30,76 @@ class TrainerViewModel: ObservableObject {
                         Pokemon(name: "ひろみち")
                        ])
     ]
-    //
+    //UserDefaultでデータをデバイスに保存する処理を追加していく。
+    private let userDefaultManager = UserDefaultManager()
+    
+    func pokemonDelete(trainer: PokemonTrainer, pokemon: Pokemon) {
+        guard let trainerIndex = pokemonTrainers.firstIndex(where: { $0.id == trainer.id }) else { return }
+        guard let pokemonIndex = pokemonTrainers[trainerIndex].pokemons.firstIndex(where: { $0.id == pokemon.id }) else { return }
+        pokemonTrainers[trainerIndex].pokemons.remove(at: pokemonIndex)
+        do {
+            try userDefaultManager.save(trainer: pokemonTrainers)
+        } catch {
+            let error = error as? DataConvertError ?? DataConvertError.unknown
+            print(error.title)
+        }
+
+    }
+    
+    
+    func delete(offset: IndexSet){
+        self.pokemonTrainers.remove(atOffsets: offset)
+        do {
+            try userDefaultManager.save(trainer: pokemonTrainers)
+        } catch {
+            let error = error as? DataConvertError ?? DataConvertError.unknown
+            print(error.title)
+        }
+    }
+    
+    func pokeDelete(offset: IndexSet){
+        self.pokemonTrainers.remove(atOffsets: offset)
+        do {
+            try userDefaultManager.save(trainer: pokemonTrainers)
+        } catch {
+            let error = error as? DataConvertError ?? DataConvertError.unknown
+            print(error.title)
+        }
+    }
+    
+    //シート入力した値をエンコード。
+    func updale(newTrainer: PokemonTrainer) {
+        guard let index = pokemonTrainers.firstIndex(where: { $0.id == newTrainer.id }) else { return }
+        print(">>>>index",index)
+        pokemonTrainers[index] = newTrainer
+        do {
+            try userDefaultManager.save(trainer: pokemonTrainers)
+        } catch {
+            let error = error as? DataConvertError ?? DataConvertError.unknown
+            print(error.title)
+        }
+    }
+    
+    //アプリ起動時に保存されていた配列のデータを呼ぶ
+    func onApper(){
+        do {
+            let savedTrainers = try userDefaultManager.load()
+            pokemonTrainers = savedTrainers
+        } catch {
+            let  error = error as? DataConvertError ?? DataConvertError.unknown
+            print(error.title)
+        }
+    }
     
     //コードスニペット。他でも使用可能。スラックなど
     func addTrainer(text: String){
         self.pokemonTrainers.append(PokemonTrainer(name: text, pokemons: []))
+        do {
+            try userDefaultManager.save(trainer: pokemonTrainers)
+        } catch {
+            let error = error as? DataConvertError ?? DataConvertError.unknown
+            print(error.title)
+        }
         isAddView = false
     }
     
@@ -51,9 +116,13 @@ class TrainerViewModel: ObservableObject {
         if let index = pokemonTrainers.firstIndex(of: trainer){
             var updatedTrainer = trainer
             updatedTrainer.pokemons.append(Pokemon(name: text))
-            print("<<<<<<",updatedTrainer.pokemons)
             pokemonTrainers[index] = updatedTrainer
-            print(">>>pokeAdd", pokemonTrainers[index])
+        }
+        do {
+            try userDefaultManager.save(trainer: pokemonTrainers)
+        } catch {
+            let error = error as? DataConvertError ?? DataConvertError.unknown
+            print(error.title)
         }
         isClosePokemonAddView()
     }

@@ -16,8 +16,11 @@ struct TopView: View {
     var body: some View {
         
         NavigationSplitView(sidebar: {
-            List(trainerViewModel.pokemonTrainers, selection: $selectionTrainer) { pokemonTrainer in
-                NavigationLink(pokemonTrainer.name, value: pokemonTrainer)
+                List(selection: $selectionTrainer) {
+                    ForEach(trainerViewModel.pokemonTrainers){ pokemonTrainer in
+                        NavigationLink(pokemonTrainer.name, value: pokemonTrainer)
+                    }
+                    .onDelete(perform: trainerViewModel.delete)
                 }
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {
@@ -39,14 +42,10 @@ struct TopView: View {
                 )
                
             }
+            .onAppear(perform: trainerViewModel.onApper)
            //🟥 .presentationDetents([.height(10)])
         }, detail:{
-            //trainerViewModel.returnAdress(trainer: selectionTrainer)で渡している。
-//            let aaaaa = trainerViewModel.returnAdress(trainer: selectionTrainer)
             if let pokemonTrainer =  trainerViewModel.returnAdress(trainer: selectionTrainer){
-                //変更させたい。選ばれたトレーナーにポケモンを追加したい。
-                //引数はトレーナー型である。
-                //トレーナー型を返す関数を作り、その関数内でポケモンを追加する。
                 EditView(pokemonTrainer: pokemonTrainer)
                 NavigationLink("アニメーションプラス") {
                     PokemonCheckView(pokemons: pokemonTrainer.pokemons)

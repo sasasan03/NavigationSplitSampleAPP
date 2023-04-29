@@ -11,7 +11,7 @@ import SwiftUI
 struct TypeTestApp: App {
     var body: some Scene {
         WindowGroup {
-           // ExperimentView()
+//            ExperimentView(textField: "aaaaa")
             TopView()
                 .environmentObject(TrainerViewModel())
          //   OnApperCounter()

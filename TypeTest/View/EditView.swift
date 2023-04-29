@@ -10,36 +10,39 @@ import SwiftUI
 struct EditView: View {
     
     @EnvironmentObject var trainerViewModel: TrainerViewModel
-//    @StateObject private var trainerViewModel = TrainerViewModel()
+    //    @StateObject private var trainerViewModel = TrainerViewModel()
     let pokemonTrainer: PokemonTrainer
     
     var body: some View {
-            List(pokemonTrainer.pokemons){ pokemon in
+        List{
+            ForEach(pokemonTrainer.pokemons){ pokemon in
                 Text(pokemon.name)
             }
-            .toolbar {
-                ToolbarItem(placement: .navigationBarTrailing) {
-                    Button {
-                        trainerViewModel.isShowPokemonAddView()
-                    } label: {
-                        Image(systemName: "plus")
-                    }
+            .onDelete(perform: trainerViewModel.pokemonDelete)
+        }
+        .toolbar {
+            ToolbarItem(placement: .navigationBarTrailing) {
+                Button {
+                    trainerViewModel.isShowPokemonAddView()
+                } label: {
+                    Image(systemName: "plus")
                 }
             }
-            .sheet(isPresented: $trainerViewModel.isShowPokeAddView) {
-                PokemonAddView(
-                    cancel: {
-                        trainerViewModel.isClosePokemonAddView()
-                    },
-                    save: { text in
-                        let _ = print("+++")
-                        trainerViewModel.addPokemon(text: text, trainer: pokemonTrainer)
-                        trainerViewModel.isClosePokemonAddView()
-                        let _ = print("---")
-                    }
-                )
-            }
-    }
+        }
+        .sheet(isPresented: $trainerViewModel.isShowPokeAddView) {
+            PokemonAddView(
+                cancel: {
+                    trainerViewModel.isClosePokemonAddView()
+                },
+                save: { text in
+                    let _ = print("+++")
+                    trainerViewModel.addPokemon(text: text, trainer: pokemonTrainer)
+                    trainerViewModel.isClosePokemonAddView()
+                    let _ = print("---")
+                }
+            )
+        }
+}
 }
 
 //struct EditView_Previews: PreviewProvider {

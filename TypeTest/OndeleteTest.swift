@@ -8,8 +8,23 @@
 import SwiftUI
 
 struct OndeleteTest: View {
+    
+    @State private var links: [String] = ["Link 1", "Link 2", "Link 3"]
+
+    
     var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+        NavigationStack {
+            List() {
+                ForEach(links, id: \.self){ link in
+                    NavigationLink(destination: Text(link)) {
+                        Text(link)
+                    }
+                }
+                .onDelete { indexSet in
+                    links.remove(atOffsets: indexSet)
+                }
+            }
+        }
     }
 }
 
