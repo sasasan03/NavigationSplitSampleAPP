@@ -73,7 +73,7 @@ struct PokemonCheckView: View{
     var body: some View {
         List(pokemons) { pokemon in
             HStack {
-                Image(systemName: "car")
+                Image(systemName: "photo.fill")
                 Text(pokemon.name)
             }
         }

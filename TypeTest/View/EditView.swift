@@ -20,7 +20,7 @@ struct EditView: View {
                 Text(pokemon.name)
             }
             .onMove { sourceIndices, destinationIndx in
-                  pokemonTrainer.pokemons.move(fromOffsets: sourceIndices, toOffset: destinationIndx)
+                //pokemonTrainer.pokemons.move(fromOffsets: sourceIndices, toOffset: destinationIndx)
             }
             .swipeActions(edge: .trailing) {
                 Button {
