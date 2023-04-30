@@ -33,12 +33,23 @@ class TrainerViewModel: ObservableObject {
     //UserDefaultでデータをデバイスに保存する処理を追加していく。
     private let userDefaultManager = UserDefaultManager()
     
-    func pokemonDelete(trainer: PokemonTrainer, pokemon: Pokemon)  {
-        guard let trainerIndex = pokemonTrainers.firstIndex(where: { $0.id == trainer.id }) else { return print("値なし1")}
-        guard let pokemonIndex = pokemonTrainers[trainerIndex].pokemons.firstIndex(where: { $0.id == pokemon.id }) else { return print("値なし2") }
-        print(">>削除",pokemonIndex)
-        pokemonTrainers[trainerIndex].pokemons.remove(at: pokemonIndex)
-        print(">>ポケモン配列",pokemonTrainers[trainerIndex].pokemons)
+    func trainerIndex(trainer: PokemonTrainer) -> Int {
+        guard let trainerIndex = pokemonTrainers.firstIndex(where: { $0.id == trainer.id }) else { return 0 }
+        return trainerIndex
+    }
+    
+    func pokeIndex(pokemonTrainer: PokemonTrainer, pokemon: Pokemon) -> Int {
+        guard  let pokeIndex = pokemonTrainer.pokemons.firstIndex(where: {
+             $0.id == pokemon.id
+        }) else { return 0 }
+        return pokeIndex
+    }
+    
+    //ポケモンの並び替えに使用
+    func movePoke(indexSet: IndexSet, index: Int, trainer: PokemonTrainer, pokemon: Pokemon){
+        let trainerIndex = trainerIndex(trainer: trainer)
+        //let pokeIndex =  pokeIndex(pokemonTrainer: trainer, pokemon: pokemon)
+        self.pokemonTrainers[trainerIndex].pokemons.move(fromOffsets: indexSet, toOffset: index)
         do {
             try userDefaultManager.save(trainer: pokemonTrainers)
         } catch {
@@ -47,21 +58,28 @@ class TrainerViewModel: ObservableObject {
         }
     }
     
-    func pokemonTrainerIndex(trainer: PokemonTrainer)-> Int{
-        guard let trainerIndex = pokemonTrainers.firstIndex(where: { $0.id == trainer.id }) else { return 0 }
-        return trainerIndex
+    //トレーナーの並び替えに使用
+    func moveTrainer(indexSet: IndexSet, index: Int){
+        self.pokemonTrainers.move(fromOffsets: indexSet, toOffset: index)
+        do {
+            try userDefaultManager.save(trainer: pokemonTrainers)
+        } catch {
+            let error = error as? DataConvertError ?? DataConvertError.unknown
+            print(error.title)
+        }
     }
-    
-//    func pokeDelete(offset: IndexSet){
-//        self.pokemonTrainers[].pokemons.remove(atOffsets: offset)
-//        do {
-//            try userDefaultManager.save(trainer: pokemonTrainers)
-//        } catch {
-//            let error = error as? DataConvertError ?? DataConvertError.unknown
-//            print(error.title)
-//        }
-//    }
-    
+    //ポケモンの要素を削除するために使用
+    func pokemonDelete(trainer: PokemonTrainer, pokemon: Pokemon)  {
+        guard let trainerIndex = pokemonTrainers.firstIndex(where: { $0.id == trainer.id }) else { return print("値なし1")}
+        guard let pokemonIndex = pokemonTrainers[trainerIndex].pokemons.firstIndex(where: { $0.id == pokemon.id }) else { return print("値なし2") }
+        pokemonTrainers[trainerIndex].pokemons.remove(at: pokemonIndex)
+        do {
+            try userDefaultManager.save(trainer: pokemonTrainers)
+        } catch {
+            let error = error as? DataConvertError ?? DataConvertError.unknown
+            print(error.title)
+        }
+    }
     
     func delete(offset: IndexSet){
         self.pokemonTrainers.remove(atOffsets: offset)
@@ -76,7 +94,6 @@ class TrainerViewModel: ObservableObject {
     //シート入力した値をエンコード。
     func updale(newTrainer: PokemonTrainer) {
         guard let index = pokemonTrainers.firstIndex(where: { $0.id == newTrainer.id }) else { return }
-        print(">>>>index",index)
         pokemonTrainers[index] = newTrainer
         do {
             try userDefaultManager.save(trainer: pokemonTrainers)
@@ -97,7 +114,6 @@ class TrainerViewModel: ObservableObject {
         }
     }
     
-    //コードスニペット。他でも使用可能。スラックなど
     func addTrainer(text: String){
         self.pokemonTrainers.append(PokemonTrainer(name: text, pokemons: []))
         do {

@@ -21,7 +21,8 @@ struct TopView: View {
                     ForEach(trainerViewModel.pokemonTrainers){ pokemonTrainer in
                         NavigationLink(pokemonTrainer.name, value: pokemonTrainer)
                     }
-                    .onDelete(perform: trainerViewModel.delete(offset: ))
+                    .onDelete(perform: trainerViewModel.delete(offset:))
+                    .onMove(perform: trainerViewModel.moveTrainer(indexSet:index:))
                 }
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {
@@ -47,9 +48,10 @@ struct TopView: View {
            //🟥 .presentationDetents([.height(10)])
         }, detail:{
             if let pokemonTrainer =  trainerViewModel.returnAdress(trainer: selectionTrainer){
-                var index = pokemonTrainer.pokemons.count
-                if index != 0 {
-                    EditView(pokemonTrainer: pokemonTrainer, pokemon: pokemonTrainer.pokemons[index - 1])
+                let pokeIndex = trainerViewModel.pokeIndex(pokemonTrainer: pokemonTrainer, pokemon: pokemon)
+                let trainerCount = pokemonTrainer.pokemons.count
+                if trainerCount != 0 {
+                    EditView(pokemonTrainer: pokemonTrainer, pokemon: pokemonTrainer.pokemons[pokeIndex])
                 } else {
                     EditView(pokemonTrainer: pokemonTrainer, pokemon: Pokemon(name: ""))
                 }

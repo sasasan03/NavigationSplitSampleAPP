@@ -19,7 +19,6 @@ struct TrainerAddView: View {
                 Text("トレーなー追加")
                 TextField("", text: $trainer)
                     .textFieldStyle(RoundedBorderTextFieldStyle())
-                    //🟨geometry使うかも
                     .frame(width: 150)
             }
             .toolbar {

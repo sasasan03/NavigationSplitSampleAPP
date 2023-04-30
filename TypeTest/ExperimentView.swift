@@ -15,28 +15,23 @@ struct ExperimentView: View {
         "Papaya",
         "Mango"
     ]
-    @State var items = [[1,2,3], [4,5,6], [7,8,9]]
     
     var body: some View {
-      
-            
-
-                List {
-                    ForEach(items.indices, id: \.self) { index in
-                        HStack {
-                            ForEach(items[index], id: \.self) { item in
-                                Text("\(item)")
-                            }
-                        }
-                        .contextMenu {
-                            Button("Remove 1") {
-                                self.items[index].removeAll { $0 == 1 }
-                            }
-                        }
-                    }
+        VStack{
+            List {
+                ForEach(fruits.indices, id: \.self) { index in
+                    Text(fruits[index])
                 }
+                .onMove(perform: move(indexSet:int:))
             }
+            EditButton()
         }
+        }
+    func move(indexSet:IndexSet, int: Int) {
+        fruits.move(fromOffsets: indexSet, toOffset: int)
+    }
+    }
+
 
 //ーーーーーーーーーーーーーーーーーーーーーonChangeのテスト
 //            Text("Hello, world!")

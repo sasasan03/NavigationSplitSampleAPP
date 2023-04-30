@@ -14,15 +14,19 @@ struct EditView: View {
     let pokemonTrainer: PokemonTrainer
     let pokemon: Pokemon
     
+    
     var body: some View {
         List{
             ForEach(pokemonTrainer.pokemons){ pokemon in
                 Text(pokemon.name)
             }
-            .swipeActions(edge: .trailing) { 
-                Button("削除"){
+            //🟥
+           // .onMove(perform: trainerViewModel.)
+            .swipeActions(edge: .trailing) {
+                Button {
                     trainerViewModel.pokemonDelete(trainer: pokemonTrainer, pokemon: pokemon)
-                    print(">>ボタン２")
+                } label: {
+                    Image(systemName: "trash.fill")
                 }
                 .tint(.red)
             }
@@ -42,10 +46,8 @@ struct EditView: View {
                     trainerViewModel.isClosePokemonAddView()
                 },
                 save: { text in
-                    let _ = print("+++")
                     trainerViewModel.addPokemon(text: text, trainer: pokemonTrainer)
                     trainerViewModel.isClosePokemonAddView()
-                    let _ = print("---")
                 }
             )
         }

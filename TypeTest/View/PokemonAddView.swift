@@ -19,7 +19,6 @@ struct PokemonAddView: View {
                 Text("ポケモン追加")
                 TextField("", text: $pokemon)
                     .textFieldStyle(RoundedBorderTextFieldStyle())
-                    //🟨geometry使うかも
                     .frame(width: 150)
             }
             .toolbar {
