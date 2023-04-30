@@ -11,17 +11,17 @@ struct EditView: View {
     
     @EnvironmentObject var trainerViewModel: TrainerViewModel
     //    @StateObject private var trainerViewModel = TrainerViewModel()
-    let pokemonTrainer: PokemonTrainer
+    var pokemonTrainer: PokemonTrainer
     let pokemon: Pokemon
-    
     
     var body: some View {
         List{
             ForEach(pokemonTrainer.pokemons){ pokemon in
                 Text(pokemon.name)
             }
-            //🟥
-           // .onMove(perform: trainerViewModel.)
+            .onMove { sourceIndices, destinationIndx in
+                  pokemonTrainer.pokemons.move(fromOffsets: sourceIndices, toOffset: destinationIndx)
+            }
             .swipeActions(edge: .trailing) {
                 Button {
                     trainerViewModel.pokemonDelete(trainer: pokemonTrainer, pokemon: pokemon)
@@ -51,7 +51,10 @@ struct EditView: View {
                 }
             )
         }
-}
+    }
+    mutating func move(indexSet:IndexSet, int: Int) {
+        pokemonTrainer.pokemons.move(fromOffsets: indexSet, toOffset: int)
+    }
 }
 
 //struct EditView_Previews: PreviewProvider {

@@ -45,18 +45,23 @@ class TrainerViewModel: ObservableObject {
         return pokeIndex
     }
     
-    //ポケモンの並び替えに使用
-    func movePoke(indexSet: IndexSet, index: Int, trainer: PokemonTrainer, pokemon: Pokemon){
-        let trainerIndex = trainerIndex(trainer: trainer)
-        //let pokeIndex =  pokeIndex(pokemonTrainer: trainer, pokemon: pokemon)
-        self.pokemonTrainers[trainerIndex].pokemons.move(fromOffsets: indexSet, toOffset: index)
-        do {
-            try userDefaultManager.save(trainer: pokemonTrainers)
-        } catch {
-            let error = error as? DataConvertError ?? DataConvertError.unknown
-            print(error.title)
-        }
+    //どこでこの関数を使うのか?EditViewのonMove内で使用したい。
+    func pokeArray(trainer: PokemonTrainer) -> [Pokemon]{
+        let pokeArray = pokemonTrainers[trainerIndex(trainer: trainer)].pokemons
+        return pokeArray
     }
+    
+    //ポケモンの並び替えに使用
+//    func movePoke(indexSet: IndexSet, index: Int, trainer: PokemonTrainer){
+//        let trainerIndex = trainerIndex(trainer: trainer)
+//        self.pokemonTrainers[trainerIndex].pokemons.move(fromOffsets: indexSet, toOffset: index)
+//        do {
+//            try userDefaultManager.save(trainer: pokemonTrainers)
+//        } catch {
+//            let error = error as? DataConvertError ?? DataConvertError.unknown
+//            print(error.title)
+//        }
+//    }
     
     //トレーナーの並び替えに使用
     func moveTrainer(indexSet: IndexSet, index: Int){
