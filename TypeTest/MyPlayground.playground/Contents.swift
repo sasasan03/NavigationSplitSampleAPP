@@ -1,6 +1,8 @@
 import UIKit
 import Foundation
 
+
+
 struct Animal {
     let id = UUID()
     var name: String

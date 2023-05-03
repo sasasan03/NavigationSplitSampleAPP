@@ -10,8 +10,8 @@ import SwiftUI
 struct EditView: View {
     
     @EnvironmentObject var trainerViewModel: TrainerViewModel
-    //    @StateObject private var trainerViewModel = TrainerViewModel()
-    var pokemonTrainer: PokemonTrainer
+//    @StateObject private var trainerViewModel = TrainerViewModel()
+    let pokemonTrainer: PokemonTrainer
     let pokemon: Pokemon
     
     var body: some View {
@@ -19,12 +19,15 @@ struct EditView: View {
             ForEach(pokemonTrainer.pokemons){ pokemon in
                 Text(pokemon.name)
             }
-            .onMove { sourceIndices, destinationIndx in
-                //pokemonTrainer.pokemons.move(fromOffsets: sourceIndices, toOffset: destinationIndx)
+            .onMove { sourceIndices, destinationIndx in//🟦Listの項目を動かせるコード
+                trainerViewModel.movePoke(indexSet: sourceIndices, index: destinationIndx, trainer: pokemonTrainer)
             }
+//            .onMove { sourceIndices, destinationIndx in //🟥Listの項目を動かせないコード
+//                pokemonTrainer.pokemons.move(fromOffsets: sourceIndices, toOffset: destinationIndx)
+//            }
             .swipeActions(edge: .trailing) {
                 Button {
-                    trainerViewModel.pokemonDelete(trainer: pokemonTrainer, pokemon: pokemon)
+                    trainerViewModel.deletePokemon(trainer: pokemonTrainer, pokemon: pokemon)
                 } label: {
                     Image(systemName: "trash.fill")
                 }
@@ -46,14 +49,11 @@ struct EditView: View {
                     trainerViewModel.isClosePokemonAddView()
                 },
                 save: { text in
-                    trainerViewModel.addPokemon(text: text, trainer: pokemonTrainer)
+                   try trainerViewModel.addPokemon(text: text, trainer: pokemonTrainer)
                     trainerViewModel.isClosePokemonAddView()
                 }
             )
         }
-    }
-    mutating func move(indexSet:IndexSet, int: Int) {
-        pokemonTrainer.pokemons.move(fromOffsets: indexSet, toOffset: int)
     }
 }
 

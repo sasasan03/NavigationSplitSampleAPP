@@ -11,7 +11,8 @@ struct TrainerAddView: View {
     
     @State private var trainer = ""
     let cancel: () -> Void
-    let save: (String) -> Void
+    let save: (String) throws -> Void
+    @State private var alert = false
     
     var body: some View {
         NavigationStack{
@@ -29,8 +30,20 @@ struct TrainerAddView: View {
                 }
                 ToolbarItem(placement: .navigationBarTrailing) {
                     Button("save") {
-                        save(trainer)
+                        do {
+                           try save(trainer)
+                        } catch {
+                            alert = true
+                            let error = error as? NonTextError ?? NonTextError.unKnownError
+                            print(">>トレーナ空",error.nonTextFieldType)
+                        }
                     }
+                    .alert("エラー", isPresented: $alert) {
+                    } message: {
+                        let error = NonTextError.nonTrainerText.nonTextFieldType
+                        Text(error)
+                    }
+
                 }
             }
         }

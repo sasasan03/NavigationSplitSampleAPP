@@ -11,7 +11,8 @@ struct PokemonAddView: View {
     
     @State private var pokemon = ""
     let cancel: () -> Void
-    let save: (String) -> Void
+    let save: (String) throws -> Void
+    @State private var alert = false
     
     var body: some View {
         NavigationStack{
@@ -29,7 +30,18 @@ struct PokemonAddView: View {
                 }
                 ToolbarItem(placement: .navigationBarTrailing) {
                     Button("save") {
-                        save(pokemon)
+                        do {
+                            try save(pokemon)
+                        } catch {
+                            alert = true
+                            let error = error as? NonTextError ?? NonTextError.unKnownError
+                            print(">>ポケモン空",error.nonTextFieldType)
+                        }
+                    }
+                    .alert("エラー", isPresented: $alert) {
+                    } message: {
+                        let error = NonTextError.nonPoekmonText.nonTextFieldType
+                        Text(error)
                     }
                 }
             }

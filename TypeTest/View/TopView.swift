@@ -13,17 +13,21 @@ struct TopView: View {
     @State private var selectionTrainer: PokemonTrainer?
     @State private var selectionPokemon: Pokemon?
     let pokemon: Pokemon
+    @State private var name = ""
     
     var body: some View {
-        
         NavigationSplitView(sidebar: {
+            VStack {
                 List(selection: $selectionTrainer) {
                     ForEach(trainerViewModel.pokemonTrainers){ pokemonTrainer in
-                        NavigationLink(pokemonTrainer.name, value: pokemonTrainer)
-                    }
-                    .onDelete(perform: trainerViewModel.delete(offset:))
+                            NavigationLink(pokemonTrainer.name, value: pokemonTrainer)//🟨
+                        }
+                    
+                    .onDelete(perform: trainerViewModel.deleteTrainer(offset:))
                     .onMove(perform: trainerViewModel.moveTrainer(indexSet:index:))
                 }
+                
+            }
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {
                     Button {
@@ -39,7 +43,7 @@ struct TopView: View {
                         trainerViewModel.isCloseTrainerAddView()
                     },
                     save: { text in
-                    trainerViewModel.addTrainer(text: text)
+                    try trainerViewModel.addTrainer(text: text)
                     }
                 )
                
@@ -53,8 +57,16 @@ struct TopView: View {
                 if trainerCount != 0 {
                     EditView(pokemonTrainer: pokemonTrainer, pokemon: pokemonTrainer.pokemons[pokeIndex])
                 } else {
-                    EditView(pokemonTrainer: pokemonTrainer, pokemon: Pokemon(name: ""))
+                    //Empty
+                    Image(systemName: "car")
+                   // EditView(pokemonTrainer: pokemonTrainer, pokemon: Pokemon(name: ""))
                 }
+//                if pokemonTrainer.name.isEmpty {
+//                    EditView(pokemonTrainer: pokemonTrainer, pokemon: Pokemon(name: ""))
+//                } else {
+//                    //Empty
+//                    EditView(pokemonTrainer: pokemonTrainer, pokemon: pokemonTrainer.pokemons[pokeIndex])
+//                }
                 NavigationLink("アニメーションプラス") {
                     PokemonCheckView(pokemons: pokemonTrainer.pokemons)
                 }
