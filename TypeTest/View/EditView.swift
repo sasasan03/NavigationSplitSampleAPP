@@ -9,22 +9,22 @@ import SwiftUI
 
 struct EditView: View {
     
-    @EnvironmentObject var trainerViewModel: TrainerViewModel
 //    @StateObject private var trainerViewModel = TrainerViewModel()
+    @EnvironmentObject var trainerViewModel: TrainerViewModel
     let pokemonTrainer: PokemonTrainer
     let pokemon: Pokemon
     
     var body: some View {
         List{
             ForEach(pokemonTrainer.pokemons){ pokemon in
+//                TextFieldRowView(name: pokemon.name) { text in
+//                    trainerViewModel.pokemonTrainers[trainerViewModel.pokeIndex(pokemonTrainer: pokemonTrainer, pokemon: pokemon)].name = text
+//                }
                 Text(pokemon.name)
             }
-            .onMove { sourceIndices, destinationIndx in//🟦Listの項目を動かせるコード
+            .onMove { sourceIndices, destinationIndx in
                 trainerViewModel.movePoke(indexSet: sourceIndices, index: destinationIndx, trainer: pokemonTrainer)
             }
-//            .onMove { sourceIndices, destinationIndx in //🟥Listの項目を動かせないコード
-//                pokemonTrainer.pokemons.move(fromOffsets: sourceIndices, toOffset: destinationIndx)
-//            }
             .swipeActions(edge: .trailing) {
                 Button {
                     trainerViewModel.deletePokemon(trainer: pokemonTrainer, pokemon: pokemon)

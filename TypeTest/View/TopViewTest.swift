@@ -1,29 +1,45 @@
 //
-//  SwiftUIView.swift
+//  TopViewTest.swift
 //  TypeTest
 //
-//  Created by sako0602 on 2023/04/19.
+//  Created by sako0602 on 2023/05/03.
 //
 
 import SwiftUI
 
-struct TopView: View {
-
+struct TopViewTest: View {
+//
     @EnvironmentObject var trainerViewModel:TrainerViewModel
     @State private var selectionTrainer: PokemonTrainer?
     let pokemon: Pokemon
+    @State private var name = ""
+    @State private var isWritting = false
     
     var body: some View {
         NavigationSplitView(sidebar: {
+            VStack {
                 List(selection: $selectionTrainer) {
-                    ForEach(trainerViewModel.pokemonTrainers){ pokemonTrainer in
-                        TopRowView(pokemonTrainer: pokemonTrainer, trainer: pokemonTrainer) { NewTrainer in
-                            trainerViewModel.updale(newTrainer: NewTrainer)
+                    ForEach(trainerViewModel.pokemonTrainers){ trainer in
+                        if isWritting {
+                            TextFieldRowView(name: trainer.name, save: { text in
+                                trainerViewModel.pokemonTrainers[trainerViewModel.trainerIndex(trainer: trainer)].name  = text
+                            })
+                        } else {
+                            NavigationLink(
+                                trainer.name,
+                                value: trainer
+                            )
                         }
                     }
                     .onDelete(perform: trainerViewModel.deleteTrainer(offset:))
                     .onMove(perform: trainerViewModel.moveTrainer(indexSet:index:))
                 }
+                Button {
+                    isWritting.toggle()
+                } label: {
+                    Text(isWritting ? "編集終わり" : "編集する")
+                }
+            }
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {
                     Button {
@@ -42,6 +58,7 @@ struct TopView: View {
                     try trainerViewModel.addTrainer(text: text)
                     }
                 )
+               
             }
             .onAppear(perform: trainerViewModel.onApper)
         }, detail:{
@@ -64,26 +81,9 @@ struct TopView: View {
     }
 }
 
-struct PokemonCheckView: View{
-    
-    let pokemons: [Pokemon]
-    
-    var body: some View {
-        List(pokemons) { pokemon in
-            HStack {
-                Image(systemName: "photo.fill")
-                Text(pokemon.name)
-            }
-        }
-    }
-}
-
-struct SwiftUIView_Previews: PreviewProvider {
-    
-    static var previews: some View {
-        TopView(
-            pokemon: Pokemon(name: "ピカ")
-        )
-            .environmentObject(TrainerViewModel())
-    }
-}
+//struct TopViewTest_Previews: PreviewProvider {
+//    static var previews: some View {
+//        TopViewTest(pokemon: Pokemon(name: "???")
+//            .environmentObject(TrainerViewModel())
+//    }
+//}

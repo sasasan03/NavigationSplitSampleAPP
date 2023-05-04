@@ -11,6 +11,8 @@ class TrainerViewModel: ObservableObject {
     
     @Published var isAddView = false
     @Published var isShowPokeAddView = false
+    @Published var isEdditView = false
+    
     
     @Published var pokemonTrainers = [
         PokemonTrainer(name: "さとる",
@@ -93,18 +95,6 @@ class TrainerViewModel: ObservableObject {
         }
     }
     
-    //渡されてきたトレーナーの名前や持っているポケモンを新しく保存するために使用
-    func updale(newTrainer: PokemonTrainer) {
-        guard let index = pokemonTrainers.firstIndex(where: { $0.id == newTrainer.id }) else { return }
-        pokemonTrainers[index] = newTrainer
-        do {
-            try userDefaultManager.save(trainer: pokemonTrainers)
-        } catch {
-            let error = error as? DataConvertError ?? DataConvertError.unknown
-            print(error.title)
-        }
-    }
-    
     //アプリ起動時に保存されていた配列のデータを呼ぶ
     func onApper(){
         do {
@@ -179,5 +169,34 @@ class TrainerViewModel: ObservableObject {
     //PokemonAddViewを閉じるために使用
     func isClosePokemonAddView(){
         isShowPokeAddView = false
+    }
+    
+    //EditViewを非表示にする
+    func isCloseEditView(){
+        isEdditView = false
+    }
+    
+    //EditViewを表示する
+    func isShowEditView(){
+        isEdditView = true
+    }
+    
+    //EditViewで入力された値を保存した後に非表示にする
+    func saveEditView(trainer: PokemonTrainer){
+        updale(newTrainer: trainer)
+        isCloseEditView()
+    }
+    
+    
+    //渡されてきたトレーナーの名前や持っているポケモンを新しく保存するために使用
+    func updale(newTrainer: PokemonTrainer) {
+        guard let index = pokemonTrainers.firstIndex(where: { $0.id == newTrainer.id }) else { return }
+        pokemonTrainers[index] = newTrainer
+        do {
+            try userDefaultManager.save(trainer: pokemonTrainers)
+        } catch {
+            let error = error as? DataConvertError ?? DataConvertError.unknown
+            print(error.title)
+        }
     }
 }

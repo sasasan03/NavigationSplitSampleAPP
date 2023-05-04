@@ -9,11 +9,16 @@ import SwiftUI
 
 @main
 struct TypeTestApp: App {
+    
     var body: some Scene {
         WindowGroup {
-//            ExperimentView()
-           TopView(pokemon: Pokemon(name: "???"))
+           
+            TopView(pokemon: Pokemon.init(name: "起こりざる"))
                 .environmentObject(TrainerViewModel())
+//            TopViewTest(pokemon: Pokemon(name: "???"))
+//                .environmentObject(TrainerViewModel())
+            
+            // ExperimentView()
         }
     }
 }
