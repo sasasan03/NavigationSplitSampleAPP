@@ -11,6 +11,7 @@ struct TopView: View {
 
     @EnvironmentObject var trainerViewModel:TrainerViewModel
     @State private var selectionTrainer: PokemonTrainer?
+    @State private var pokemonTrainer: PokemonTrainer? = nil
     let pokemon: Pokemon
     
     var body: some View {

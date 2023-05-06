@@ -187,6 +187,39 @@ class TrainerViewModel: ObservableObject {
         isCloseEditView()
     }
     
+    func save(trainerName: String, newTrainer: PokemonTrainer){
+        guard let index = pokemonTrainers.firstIndex(where: { $0.id == newTrainer.id }) else { return }
+        pokemonTrainers[index] = newTrainer
+        
+        do {
+            try userDefaultManager.save(trainer: pokemonTrainers)
+        } catch {
+            let error = error as? DataConvertError ?? DataConvertError.unknown
+            print(error.title)
+        }
+    }
+    //アドホック多層saveの引数が違う
+    func save(of newTrainer: PokemonTrainer){
+        guard let index = pokemonTrainers.firstIndex(where: { $0.id == newTrainer.id }) else { return }
+        pokemonTrainers[index] = newTrainer
+        
+        do {
+            try userDefaultManager.save(trainer: pokemonTrainers)
+        } catch {
+            let error = error as? DataConvertError ?? DataConvertError.unknown
+            print(error.title)
+        }
+    }
+    
+    func getName<T>(of t: T) -> String {
+        if let person = t as? PokemonTrainer {
+          return ""//  return person.firstName + " " + person.lastName
+        } else if let book = t as? Pokemon {
+           return "" //return book.title
+        } else {
+            return ""
+        }
+    }
     
     //渡されてきたトレーナーの名前や持っているポケモンを新しく保存するために使用
     func updale(newTrainer: PokemonTrainer) {

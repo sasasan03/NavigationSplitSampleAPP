@@ -131,8 +131,6 @@
 			children = (
 				695415D229F0107A00D36745 /* TopView.swift */,
 				694C60412A039CE100BA5BFA /* TopRowView.swift */,
-				695372842A02409F00E119D2 /* TopViewTest.swift */,
-				695372802A02270F00E119D2 /* TextFieldRowView.swift */,
 				695415D429F3B36B00D36745 /* EditView.swift */,
 				695415DF29F3C2F600D36745 /* PokemonAddView.swift */,
 			);
@@ -169,6 +167,8 @@
 				695415DA29F3B5FB00D36745 /* ViewModel */,
 				695415DB29F3B60D00D36745 /* Model */,
 				69BC5B3C29EEA40C00FC9828 /* Assets.xcassets */,
+				695372842A02409F00E119D2 /* TopViewTest.swift */,
+				695372802A02270F00E119D2 /* TextFieldRowView.swift */,
 				6953727129F68AA600E119D2 /* MyPlayground.playground */,
 				69BC5B3E29EEA40C00FC9828 /* Preview Content */,
 			);

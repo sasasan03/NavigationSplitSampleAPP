@@ -7,51 +7,60 @@
 
 import SwiftUI
 
-struct Animal: Identifiable {
-    var id = UUID()
-    var name: String
-}
-
-
 struct ExperimentView: View {
     
-    @Environment(\.dismiss) var dismiss
-    @Environment(\.editMode) var editMode
-    @State private var name = "さとし"
     @EnvironmentObject var trainerViewModel:TrainerViewModel
-    @State private var animals = [
-        Animal(name: " ひと"),
-        Animal(name: "ライオン"),
-        Animal(name: " 虎")
-    ]
-    @State private var isWritting = false
+    @State private var selectionTrainer: PokemonTrainer?
+    let pokemon: Pokemon
+    @State var pokemonTrainer: PokemonTrainer? = nil
+    @State private var isEdit = false
     
     var body: some View {
-        VStack {
-            List {
-                ForEach(animals.indices, id: \.self){ index in
-//                    if isWritting {
-//                        TextFieldRowView(
-//                            name: animals[index].name,
-//                            save: { text in
-//                                animals[index].name = text
-//                            }, pokemonTraioner: PokemonTrainer)
-//                    } else {
-//                        Text(animals[index].name)
-//                    }
+        NavigationSplitView(sidebar: {
+                List(selection: $selectionTrainer) {
+                    ForEach(trainerViewModel.pokemonTrainers){ pokemonTrainer in
+                        HStack{
+                            Button {
+                                self.pokemonTrainer = pokemonTrainer
+                            } label: {
+                                Text("ボタン")
+                                    .foregroundColor(.blue)
+                            }
+                            Text(pokemonTrainer.name)
+                        }
+                    }
                 }
-            }
-            Button(isWritting ? "保存" : "編集"){
-                isWritting.toggle()
+                .sheet(item: $pokemonTrainer) { pokemonTrainer in
+                    TrainerEditView(
+                        trainerName: pokemonTrainer.name,
+                        cancel: {trainerViewModel.isCloseEditView() },
+                        edit: { trainerName in
+                            trainerViewModel.pokemonTrainers[trainerViewModel.trainerIndex(trainer: pokemonTrainer)].name = trainerName
+                        })
+                }
+            .onAppear(perform: trainerViewModel.onApper)
+        }, detail:{
+            if let pokemonTrainer =  trainerViewModel.returnAdress(trainer: selectionTrainer){
+                let pokeIndex = trainerViewModel.pokeIndex(pokemonTrainer: pokemonTrainer, pokemon: pokemon)
+                let trainerCount = pokemonTrainer.pokemons.count
+                if trainerCount != 0 {
+                    EditView(pokemonTrainer: pokemonTrainer, pokemon: pokemonTrainer.pokemons[pokeIndex])
+                } else {
+                    EditView(pokemonTrainer: pokemonTrainer, pokemon: Pokemon(name: ""))
+                }
+                NavigationLink("アニメーションプラス") {
+                    PokemonCheckView(pokemons: pokemonTrainer.pokemons)
+                }
+            } else {
+                Text("ポケモン")
             }
         }
+        )
     }
 }
 
-
-
 struct ExperimentView_Previews: PreviewProvider {
     static var previews: some View {
-        ExperimentView()
+        ExperimentView(pokemon: Pokemon.init(name: "ごまぞう"))
     }
 }

@@ -12,13 +12,13 @@ struct TypeTestApp: App {
     
     var body: some Scene {
         WindowGroup {
-           
             TopView(pokemon: Pokemon.init(name: "起こりざる"))
                 .environmentObject(TrainerViewModel())
 //            TopViewTest(pokemon: Pokemon(name: "???"))
 //                .environmentObject(TrainerViewModel())
             
-            // ExperimentView()
+//            ExperimentView(pokemon: Pokemon.init(name: " ごまぞう"))
+//                .environmentObject(TrainerViewModel())
         }
     }
 }

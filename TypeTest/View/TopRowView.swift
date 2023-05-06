@@ -13,12 +13,13 @@ struct TopRowView: View {
     @State var pokemonTrainer: PokemonTrainer? = nil
     let trainer: PokemonTrainer
     let update: (PokemonTrainer) -> Void
+    @State private var isEddit = false
     
     var body: some View {
         NavigationStack{
             HStack{
                 Button {
-                    pokemonTrainer = trainerViewModel.pokemonTrainers[trainerViewModel.trainerIndex(trainer: trainer)]
+                    isEddit = true
                 } label: {
                     Image(systemName: "info.circle.fill")
                         .foregroundColor(.blue)
@@ -26,12 +27,14 @@ struct TopRowView: View {
                 .buttonStyle(BorderlessButtonStyle())
                 NavigationLink(trainer.name,value: trainer)
             }
-            .sheet(item: $pokemonTrainer) { pokemonTrainer in
+            .sheet(isPresented: $isEddit){
                 TrainerEditView(
-                    trainerName: pokemonTrainer.name,
-                    cancel: {trainerViewModel.isCloseEditView() },
+                    trainerName: trainer.name,
+                    cancel: { isEddit = false },
                     edit: { trainerName in
-                        trainerViewModel.pokemonTrainers[trainerViewModel.trainerIndex(trainer: pokemonTrainer)].name = trainerName
+                        trainerViewModel.pokemonTrainers[trainerViewModel.trainerIndex(trainer: trainer)].name = trainerName
+                        update(trainer)
+                        isEddit = false
                     })
             }
         }
