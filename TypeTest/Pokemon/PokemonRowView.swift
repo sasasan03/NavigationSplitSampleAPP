@@ -1,18 +1,19 @@
 //
-//  TopRowView.swift
+//  PokemonRowView.swift
 //  TypeTest
 //
-//  Created by sako0602 on 2023/05/04.
+//  Created by sako0602 on 2023/05/06.
 //
 
 import SwiftUI
 
-struct TopRowView: View {
+struct PokemonRowView: View {
     
     @EnvironmentObject var trainerViewModel:TrainerViewModel
     @State var pokemonTrainer: PokemonTrainer? = nil
+    let pokemon: Pokemon
     let trainer: PokemonTrainer
-    let update: (PokemonTrainer) -> Void
+    let update: (Pokemon) -> Void
     @State private var isEddit = false
     
     var body: some View {
@@ -25,14 +26,15 @@ struct TopRowView: View {
                         .foregroundColor(.blue)
                 }
                 .buttonStyle(BorderlessButtonStyle())
-                NavigationLink(trainer.name,value: trainer)
+                Text(pokemon.name)
             }
             .sheet(isPresented: $isEddit){
-                TrainerEditView(
-                    trainerName: trainer.name,
+                PokemonEditView(
+                    pokemonName: pokemon.name,
                     cancel: { isEddit = false },
                     edit: { trainerName in
-                        trainerViewModel.save(trainerName: trainerName, newTrainer: trainer)
+                        trainerViewModel.pokemonTrainers[trainerViewModel.trainerIndex(trainer: trainer)].pokemons[trainerViewModel.pokeIndex(pokemonTrainer: trainer, pokemon: pokemon)].name = trainerName
+                        update(pokemon)
                         isEddit = false
                     })
             }
@@ -40,8 +42,8 @@ struct TopRowView: View {
     }
 }
 
-struct TopRowView_Previews: PreviewProvider {
+struct PokemonRowView_Previews: PreviewProvider {
     static var previews: some View {
-        TopRowView(trainer: PokemonTrainer.init(name: "榊", pokemons: [Pokemon(name: "ニャース")]), update: { _ in })
+        PokemonRowView(pokemon: Pokemon.init(name: "刺身"), trainer: PokemonTrainer.init(name: "ブリ", pokemons: [Pokemon.init(name: "あじ")]), update: { _ in })
     }
 }

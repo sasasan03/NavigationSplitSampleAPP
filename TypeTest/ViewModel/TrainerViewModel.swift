@@ -190,7 +190,7 @@ class TrainerViewModel: ObservableObject {
     func save(trainerName: String, newTrainer: PokemonTrainer){
         guard let index = pokemonTrainers.firstIndex(where: { $0.id == newTrainer.id }) else { return }
         pokemonTrainers[index] = newTrainer
-        
+        pokemonTrainers[index].name = trainerName
         do {
             try userDefaultManager.save(trainer: pokemonTrainers)
         } catch {
@@ -199,10 +199,9 @@ class TrainerViewModel: ObservableObject {
         }
     }
     //アドホック多層saveの引数が違う
-    func save(of newTrainer: PokemonTrainer){
+    func save(newTrainer: PokemonTrainer){
         guard let index = pokemonTrainers.firstIndex(where: { $0.id == newTrainer.id }) else { return }
         pokemonTrainers[index] = newTrainer
-        
         do {
             try userDefaultManager.save(trainer: pokemonTrainers)
         } catch {
@@ -211,15 +210,26 @@ class TrainerViewModel: ObservableObject {
         }
     }
     
-    func getName<T>(of t: T) -> String {
-        if let person = t as? PokemonTrainer {
-          return ""//  return person.firstName + " " + person.lastName
-        } else if let book = t as? Pokemon {
-           return "" //return book.title
-        } else {
-            return ""
+    func pokeSave(newPokemon: Pokemon, trainer: PokemonTrainer){
+        let index = trainerIndex(trainer: trainer)
+        let pokeIndex = pokeIndex(pokemonTrainer: trainer, pokemon: newPokemon)
+        pokemonTrainers[index].pokemons[pokeIndex] = newPokemon
+        do {
+            try userDefaultManager.save(trainer: pokemonTrainers)
+        } catch {
+            
         }
     }
+    
+//    func getName<T>(of t: T) -> String {
+//        if let person = t as? PokemonTrainer {
+//          return ""//  return person.firstName + " " + person.lastName
+//        } else if let book = t as? Pokemon {
+//           return "" //return book.title
+//        } else {
+//            return ""
+//        }
+//    }
     
     //渡されてきたトレーナーの名前や持っているポケモンを新しく保存するために使用
     func updale(newTrainer: PokemonTrainer) {

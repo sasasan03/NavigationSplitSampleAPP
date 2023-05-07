@@ -27,6 +27,22 @@ class UserDefaultManager {
         }
     }
     
+    func save(trainer: PokemonTrainer) throws {
+        do {
+            let json = try encode2(trainer: trainer)
+            userDefault.set(json, forKey: key)
+        } catch {
+            switch error as? DataConvertError ?? DataConvertError.unknown {
+            case .encodingError:
+                throw DataConvertError.encodingError
+            case .dataCorrupted:
+                throw DataConvertError.dataCorrupted
+            default:
+                throw DataConvertError.unknown
+            }
+        }
+    }
+    
     func load() throws -> [PokemonTrainer] {
         guard let json = userDefault.string(forKey: key) else {
             throw DataConvertError.dataGetError
@@ -59,6 +75,18 @@ class UserDefaultManager {
     }
     
     private func encode(trainer: [PokemonTrainer]) throws -> String {
+        do {
+            let data = try JSONEncoder().encode(trainer)
+            guard let json = String(data: data, encoding: .utf8) else {
+                throw DataConvertError.dataCorrupted
+            }
+            return json
+        } catch {
+            throw DataConvertError.encodingError
+        }
+    }
+    
+    private func encode2(trainer: PokemonTrainer) throws -> String {
         do {
             let data = try JSONEncoder().encode(trainer)
             guard let json = String(data: data, encoding: .utf8) else {

@@ -13,14 +13,25 @@ struct EditView: View {
     @EnvironmentObject var trainerViewModel: TrainerViewModel
     let pokemonTrainer: PokemonTrainer
     let pokemon: Pokemon
+    @State var isEdit = false
     
     var body: some View {
         List{
             ForEach(pokemonTrainer.pokemons){ pokemon in
-//                TextFieldRowView(name: pokemon.name) { text in
-//                    trainerViewModel.pokemonTrainers[trainerViewModel.pokeIndex(pokemonTrainer: pokemonTrainer, pokemon: pokemon)].name = text
+                PokemonRowView(pokemon: pokemon,
+                               trainer: pokemonTrainer,
+                               update: { text in
+                    trainerViewModel.save(trainerName: text.name, newTrainer: pokemonTrainer)
+                })
+//                HStack{
+//                    Button {
+//                        isEdit = true
+//                    } label: {
+//                        Image(systemName: "info.circle.fill")
+//                    }
+//                    Text(pokemon.name)
 //                }
-                Text(pokemon.name)
+                
             }
             .onMove { sourceIndices, destinationIndx in
                 trainerViewModel.movePoke(indexSet: sourceIndices, index: destinationIndx, trainer: pokemonTrainer)
@@ -53,6 +64,9 @@ struct EditView: View {
                     trainerViewModel.isClosePokemonAddView()
                 }
             )
+        }
+        .sheet(isPresented: $isEdit){
+            
         }
     }
 }
