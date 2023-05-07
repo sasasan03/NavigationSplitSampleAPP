@@ -11,7 +11,6 @@ struct PokemonEditView: View {
     
     @Environment(\.dismiss) var dismiss
     @State var pokemonName: String
-    let cancel: () -> Void
     let edit: (String) throws -> Void
     @State private var alert = false
     
@@ -33,6 +32,7 @@ struct PokemonEditView: View {
                     Button("save") {
                         do {
                            try edit(pokemonName)
+                            print(">>>>>PE/pokeName", pokemonName) //ピジョンと入力
                             dismiss()
                         } catch {
                             alert = true
@@ -54,6 +54,6 @@ struct PokemonEditView: View {
 
 struct PokemonEditView_Previews: PreviewProvider {
     static var previews: some View {
-        PokemonEditView(pokemonName: "ピカ", cancel: { }, edit: { _ in })
+        PokemonEditView(pokemonName: "ピカ", edit: { _ in })
     }
 }

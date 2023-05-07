@@ -9,8 +9,8 @@ import SwiftUI
 
 struct PokemonAddView: View {
     
+    @Environment(\.dismiss) var dismiss
     @State private var pokemon = ""
-    let cancel: () -> Void
     let save: (String) throws -> Void
     @State private var alert = false
     
@@ -25,13 +25,14 @@ struct PokemonAddView: View {
             .toolbar {
                 ToolbarItem(placement: .navigationBarLeading){
                     Button("cancel") {
-                        cancel()
+                        dismiss()
                     }
                 }
                 ToolbarItem(placement: .navigationBarTrailing) {
                     Button("save") {
                         do {
                             try save(pokemon)
+                            dismiss()
                         } catch {
                             alert = true
                             let error = error as? NonTextError ?? NonTextError.unKnownError
@@ -51,6 +52,6 @@ struct PokemonAddView: View {
 
 struct PokemonAddView_Previews: PreviewProvider {
     static var previews: some View {
-        PokemonAddView(cancel: { }, save: { _ in })
+        PokemonAddView(save: { _ in })
     }
 }

@@ -10,7 +10,6 @@ import SwiftUI
 struct PokemonRowView: View {
     
     @EnvironmentObject var trainerViewModel:TrainerViewModel
-    @State var pokemonTrainer: PokemonTrainer? = nil
     let pokemon: Pokemon
     let trainer: PokemonTrainer
     let update: (Pokemon) -> Void
@@ -31,10 +30,15 @@ struct PokemonRowView: View {
             .sheet(isPresented: $isEddit){
                 PokemonEditView(
                     pokemonName: pokemon.name,
-                    cancel: { isEddit = false },
-                    edit: { trainerName in
-                        trainerViewModel.pokemonTrainers[trainerViewModel.trainerIndex(trainer: trainer)].pokemons[trainerViewModel.pokeIndex(pokemonTrainer: trainer, pokemon: pokemon)].name = trainerName
-                        update(pokemon)
+                    //PokemonEditViewから入力された値（pokeName）が送られてくる。
+                    edit: { pokeName in//🟦ちゃんとピジョンになっている
+                        let _ = print(">>>>>PR/pokeName", pokeName)//🟦ピジョン
+                        let pokeIndex = trainerViewModel.pokeIndex(pokemonTrainer: trainer, pokemon: pokemon)
+                        let trainerIndex = trainerViewModel.trainerIndex(trainer: trainer)
+                        trainerViewModel.pokemonTrainers[trainerIndex].pokemons[pokeIndex].name = pokeName
+                        let _ = print(">>>>>PR/array", trainerViewModel.pokemonTrainers[trainerIndex].pokemons[pokeIndex].name)//🟦ピジョン
+                        update(pokemon)//🟥ポッポ　→　ピジョンになっていないといけないところ
+                        let _ = print("#####pokemon", pokemon)
                         isEddit = false
                     })
             }

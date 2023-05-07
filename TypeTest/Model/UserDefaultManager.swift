@@ -27,10 +27,27 @@ class UserDefaultManager {
         }
     }
     
-    func save(trainer: PokemonTrainer) throws {
+//    func save(trainer: PokemonTrainer) throws {
+//        do {
+//            let json = try encode2(trainer: trainer)
+//            userDefault.set(json, forKey: key)
+//        } catch {
+//            switch error as? DataConvertError ?? DataConvertError.unknown {
+//            case .encodingError:
+//                throw DataConvertError.encodingError
+//            case .dataCorrupted:
+//                throw DataConvertError.dataCorrupted
+//            default:
+//                throw DataConvertError.unknown
+//            }
+//        }
+//    }
+    
+    func savePoke(trainer: PokemonTrainer) throws {
         do {
             let json = try encode2(trainer: trainer)
             userDefault.set(json, forKey: key)
+            userDefault.value(forKey: key) as! [[Pokemon]]
         } catch {
             switch error as? DataConvertError ?? DataConvertError.unknown {
             case .encodingError:

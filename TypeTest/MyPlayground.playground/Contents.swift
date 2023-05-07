@@ -1,7 +1,16 @@
 import UIKit
 import Foundation
 
-
+struct Pokemon: Codable {
+    var name: String
+}
+//let array = [["a","b"]]
+//let array = [ PokemonTrainer(name: "さとし", pokemons: [Pokemon(name: "ピカ")])]
+//let array = [[Pokemon(name: "ピカ")]]
+//let userdefaults = UserDefaults()
+//userdefaults.set(array, forKey: "data")
+//let retreivedData = userdefaults.value(forKey: "data")// as! [[Pokemon]]
+//print(retreivedData)
 
 struct Animal {
     let id = UUID()

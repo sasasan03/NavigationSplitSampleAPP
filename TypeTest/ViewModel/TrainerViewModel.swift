@@ -210,14 +210,16 @@ class TrainerViewModel: ObservableObject {
         }
     }
     
-    func pokeSave(newPokemon: Pokemon, trainer: PokemonTrainer){
+    func pokeSave(newPokemon: Pokemon, trainer: PokemonTrainer){ //Pokemon
         let index = trainerIndex(trainer: trainer)
         let pokeIndex = pokeIndex(pokemonTrainer: trainer, pokemon: newPokemon)
         pokemonTrainers[index].pokemons[pokeIndex] = newPokemon
         do {
             try userDefaultManager.save(trainer: pokemonTrainers)
+//            let _ = print("ああああ",pokemonTrainers)
+//            print("セーブ完了")
         } catch {
-            
+//            print("セーブ失敗")
         }
     }
     

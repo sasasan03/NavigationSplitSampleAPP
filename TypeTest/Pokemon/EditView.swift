@@ -20,18 +20,12 @@ struct EditView: View {
             ForEach(pokemonTrainer.pokemons){ pokemon in
                 PokemonRowView(pokemon: pokemon,
                                trainer: pokemonTrainer,
-                               update: { text in
-                    trainerViewModel.save(trainerName: text.name, newTrainer: pokemonTrainer)
+                               update: { pokemon in
+                    //🟥元々あるはトレーナーのポケモン配列を渡しているだけなのでポッポのまま
+                    //🟥pokemon = ポッポ
+                    let _ = print(">>>>>E/pokemon", pokemon)
+                    trainerViewModel.pokeSave(newPokemon: pokemon, trainer: pokemonTrainer)
                 })
-//                HStack{
-//                    Button {
-//                        isEdit = true
-//                    } label: {
-//                        Image(systemName: "info.circle.fill")
-//                    }
-//                    Text(pokemon.name)
-//                }
-                
             }
             .onMove { sourceIndices, destinationIndx in
                 trainerViewModel.movePoke(indexSet: sourceIndices, index: destinationIndx, trainer: pokemonTrainer)
@@ -56,9 +50,6 @@ struct EditView: View {
         }
         .sheet(isPresented: $trainerViewModel.isShowPokeAddView) {
             PokemonAddView(
-                cancel: {
-                    trainerViewModel.isClosePokemonAddView()
-                },
                 save: { text in
                    try trainerViewModel.addPokemon(text: text, trainer: pokemonTrainer)
                     trainerViewModel.isClosePokemonAddView()
