@@ -37,7 +37,7 @@ struct PokemonRowView: View {
                         let trainerIndex = trainerViewModel.trainerIndex(trainer: trainer)
                         trainerViewModel.pokemonTrainers[trainerIndex].pokemons[pokeIndex].name = pokeName
                         let _ = print(">>>>>PR/array", trainerViewModel.pokemonTrainers[trainerIndex].pokemons[pokeIndex].name)//🟦ピジョン
-                        update(pokemon)//🟥ポッポ　→　ピジョンになっていないといけないところ
+                        update(trainerViewModel.pokemonTrainers[trainerIndex].pokemons[pokeIndex])//🟥ポッポ　→　ピジョンになっていないといけないところ
                         let _ = print("#####pokemon", pokemon)
                         isEddit = false
                     })
