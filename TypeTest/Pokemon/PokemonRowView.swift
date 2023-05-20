@@ -48,6 +48,6 @@ struct PokemonRowView: View {
 
 struct PokemonRowView_Previews: PreviewProvider {
     static var previews: some View {
-        PokemonRowView(pokemon: Pokemon.init(name: "刺身"), trainer: PokemonTrainer.init(name: "ブリ", pokemons: [Pokemon.init(name: "あじ")]), update: { _ in })
+        PokemonRowView(pokemon: Pokemon.init(name: "刺身", isChecked: false), trainer: PokemonTrainer.init(name: "ブリ", pokemons: [Pokemon.init(name: "あじ", isChecked: false)]), update: { _ in })
     }
 }

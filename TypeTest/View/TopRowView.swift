@@ -42,6 +42,6 @@ struct TopRowView: View {
 
 struct TopRowView_Previews: PreviewProvider {
     static var previews: some View {
-        TopRowView(trainer: PokemonTrainer.init(name: "榊", pokemons: [Pokemon(name: "ニャース")]), update: { _ in })
+        TopRowView(trainer: PokemonTrainer.init(name: "榊", pokemons: [Pokemon(name: "ニャース", isChecked: false)]), update: { _ in })
     }
 }

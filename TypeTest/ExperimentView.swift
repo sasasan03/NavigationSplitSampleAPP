@@ -46,7 +46,7 @@ struct ExperimentView: View {
                 if trainerCount != 0 {
                     EditView(pokemonTrainer: pokemonTrainer, pokemon: pokemonTrainer.pokemons[pokeIndex])
                 } else {
-                    EditView(pokemonTrainer: pokemonTrainer, pokemon: Pokemon(name: ""))
+                    EditView(pokemonTrainer: pokemonTrainer, pokemon: Pokemon(name: "", isChecked: false))
                 }
                 NavigationLink("アニメーションプラス") {
                     PokemonCheckView(pokemons: pokemonTrainer.pokemons)
@@ -61,6 +61,6 @@ struct ExperimentView: View {
 
 struct ExperimentView_Previews: PreviewProvider {
     static var previews: some View {
-        ExperimentView(pokemon: Pokemon.init(name: "ごまぞう"))
+        ExperimentView(pokemon: Pokemon.init(name: "ごまぞう", isChecked: false))
     }
 }

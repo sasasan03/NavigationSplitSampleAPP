@@ -13,23 +13,26 @@ class TrainerViewModel: ObservableObject {
     @Published var isShowPokeAddView = false
     @Published var isEdditView = false
     
+    func isCloseEditView(){
+        isEdditView = false
+    }
     
     @Published var pokemonTrainers = [
         PokemonTrainer(name: "さとる",
                        pokemons: [
-                        Pokemon(name:"びかちお"),
-                        Pokemon(name: "ぴぽさる"),
+                        Pokemon(name:"びかちお", isChecked: true),
+                        Pokemon(name: "ぴぽさる", isChecked: true),
                         
                        ]),
         PokemonTrainer(name: "かずみ",
                        pokemons: [
-                        Pokemon(name:"とげぴよ"),
-                        Pokemon(name: "こだっきゅ")
+                        Pokemon(name:"とげぴよ", isChecked: true),
+                        Pokemon(name: "こだっきゅ", isChecked: true)
                        ]),
         PokemonTrainer(name: "たけお",
                        pokemons: [
-                        Pokemon(name:"いわへび"),
-                        Pokemon(name: "ひろみち")
+                        Pokemon(name:"いわへび", isChecked: true),
+                        Pokemon(name: "ひろみち", isChecked: true)
                        ])
     ]
     //UserDefaultでデータをデバイスに保存する処理を追加していく。
@@ -138,7 +141,7 @@ class TrainerViewModel: ObservableObject {
             guard text != "" else {
                 throw NonTextError.nonPoekmonText
             }
-            updatedTrainer.pokemons.append(Pokemon(name: text))
+            updatedTrainer.pokemons.append(Pokemon(name: text, isChecked: false))
             pokemonTrainers[index] = updatedTrainer
         }
         do {
@@ -169,22 +172,6 @@ class TrainerViewModel: ObservableObject {
     //PokemonAddViewを閉じるために使用
     func isClosePokemonAddView(){
         isShowPokeAddView = false
-    }
-    
-    //EditViewを非表示にする
-    func isCloseEditView(){
-        isEdditView = false
-    }
-    
-    //EditViewを表示する
-    func isShowEditView(){
-        isEdditView = true
-    }
-    
-    //EditViewで入力された値を保存した後に非表示にする
-    func saveEditView(trainer: PokemonTrainer){
-        updale(newTrainer: trainer)
-        isCloseEditView()
     }
     
     func save(trainerName: String, newTrainer: PokemonTrainer){

@@ -17,7 +17,7 @@ struct PokemonEditView: View {
     var body: some View {
         NavigationStack{
             HStack{
-                Text("ポケモンの名前変更")
+                Text("ポケモン")
                 TextField("", text: $pokemonName)
                     .textFieldStyle(RoundedBorderTextFieldStyle())
                     .frame(width: 150)

@@ -68,7 +68,7 @@ struct TopViewTest: View {
                 if trainerCount != 0 {
                     EditView(pokemonTrainer: pokemonTrainer, pokemon: pokemonTrainer.pokemons[pokeIndex])
                 } else {
-                    EditView(pokemonTrainer: pokemonTrainer, pokemon: Pokemon(name: ""))
+                    EditView(pokemonTrainer: pokemonTrainer, pokemon: Pokemon(name: "", isChecked: false))
                 }
                 NavigationLink("アニメーションプラス") {
                     PokemonCheckView(pokemons: pokemonTrainer.pokemons)
