@@ -57,6 +57,8 @@ struct TopView: View {
                 Button("falseボタン"){
                   let changeBool = trainerViewModel.pokemonTrainers.unchecked()
                     print(">>>>falseになる",changeBool)
+                    print("aaa")
+                    print("bbb")
                 }
             } else {
                 Text("ポケモン")
