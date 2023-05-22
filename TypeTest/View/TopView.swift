@@ -61,7 +61,7 @@ struct TopView: View {
                     print("bbb")
                 }
             } else {
-                Text("ポケモン")
+                Text("ポケモンだよーん")
             }
         }
         )
