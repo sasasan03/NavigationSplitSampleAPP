@@ -24,7 +24,8 @@ struct TypeTestApp: App {
     
     var body: some Scene {
         WindowGroup {
-            SignInView()
+    //       SignInView()
+            AuthenticationView()
 //            TopView(pokemon: Pokemon.init(name: "起こりざる", isChecked: false))
 //                .environmentObject(TrainerViewModel())
 //            TopViewTest(pokemon: Pokemon(name: "???"))

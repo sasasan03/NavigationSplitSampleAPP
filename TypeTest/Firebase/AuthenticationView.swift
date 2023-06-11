@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import FirebaseAuth
 
 struct AuthenticationView: View {
     
@@ -13,17 +14,27 @@ struct AuthenticationView: View {
     @State private var password = ""
     
     var body: some View {
-        VStack {
-            TextField("email", text: $email)
-            TextField("pass word", text: $password)
-            Button("ログイン") {
-                
-            }
-            Button("パスワードリセット") {
-                
-            }
-            Button("未登録の方はこちら") {
-                
+        NavigationStack{
+            VStack {
+                TextField("email", text: $email)
+                TextField("pass word", text: $password)
+                Button("ログイン") {
+                    //🟥signIn()メソッド。引数に認証対象のメールアドレスとパスワードを渡す。サインインできれば、resultにユーザー情報が格納される。
+                    Auth.auth().signIn(withEmail: email, password: password){ result , error in
+                        if let user = result?.user {
+                            //ログイン時に閲覧できる画面として画面遷移させる
+                            print(user,"ログインしました")
+                        } else {
+                            print("未登録のユーザーです")
+                        }
+                    }
+                }
+                NavigationLink("パスワードリセット") {
+                    PasswordResetView()
+                }
+                NavigationLink("未登録の方はこちら"){
+                    EntryAuthView()
+                }
             }
         }
     }
