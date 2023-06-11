@@ -10,7 +10,6 @@ import SwiftUI
 struct PasswordResetView: View {
     var body: some View {
         Text("Hello, World!2")
-    }
 }
 
 struct PasswordResetView_Previews: PreviewProvider {
