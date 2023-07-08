@@ -6,10 +6,21 @@
 //
 
 import SwiftUI
+import FirebaseAuth
 
 struct PasswordResetView: View {
+    
+    @State var email = ""
+    
     var body: some View {
-        Text("PasswordResetView")
+        VStack {
+            TextField("email address", text: $email)
+            Button("パスワードリセット メール送信"){
+                Auth.auth().sendPasswordReset(withEmail: email){ error in
+                    
+                }
+            }
+        }
     }
 }
 

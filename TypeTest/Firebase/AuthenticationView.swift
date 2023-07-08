@@ -33,7 +33,7 @@ struct AuthenticationView: View {
                     PasswordResetView()
                 }
                 NavigationLink("未登録の方はこちら"){
-                    EntryAuthView()
+                    SignInView()
                 }
             }
         }
